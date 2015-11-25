@@ -207,7 +207,7 @@ always @ (*) begin
 				(current_state == DISPLAY_ON ) 		? 8'hc:
 				(current_state == CLEAR_DISPLAY ) 	? 8'h1:
 				(current_state == SET_ADDRESS) 		? 8'h80:
-				(current_state == WRITE_CHAR) 		? info[7:0]:				
+				(current_state == WRITE_CHAR) 		? info:				
 				8'h0;
 				
 		

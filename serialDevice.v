@@ -25,8 +25,8 @@ module serialDevice(
 	input wire rx,
 	output wire tx,
 	input wire start_send,
-	input wire [3:0]in_data,
-
+	input wire [7:0]in_data,
+	output wire [7:0]out_data,
 	output wire [7:0]lcd_db,
 	output wire lcd_e,
 	output wire lcd_rs,
@@ -36,7 +36,7 @@ module serialDevice(
 	);
 	
 wire finished;
-wire [7:0]out_data;
+	
 	receptor r1(
 		.clk(clk),
 		.reset(reset),
@@ -44,7 +44,8 @@ wire [7:0]out_data;
 		.data(out_data),
 		.finished(finished)
 	);
-
+	
+	
 	
 	controller lcd (
     .clk(clk), 
@@ -57,12 +58,19 @@ wire [7:0]out_data;
     .lcd_rs(lcd_rs), 
     .lcd_rw(lcd_rw)
     );
+	reg [31:0]ff_lcd_db;
+	always@(posedge clk or posedge lcd_e) begin 
+		if(lcd_e) begin 
+			ff_lcd_db<= lcd_db;
+		end
+	
+	end
 	
 	transmisor  t1(
 		.clk(clk),
 		.reset(reset),
 		.iniciar_envio(start),
-		.data({4'd0,in_data}),
+		.data(in_data),
 		.y(tx)
 	);
 	
@@ -72,8 +80,6 @@ wire [7:0]out_data;
     .start_send(start_send), 
     .start(start)
     );
-	
-  
 	
 
 endmodule

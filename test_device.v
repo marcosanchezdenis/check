@@ -49,7 +49,8 @@ serialDevice instance_name (
     .rx(rx), 
     .tx(tx), 
     .start_send(start_send), 
-    .in_data(in_data),  
+    .in_data(in_data), 
+    .out_data(out_data), 
     .lcd_db(lcd_db), 
     .lcd_e(lcd_e), 
     .lcd_rs(lcd_rs), 
@@ -60,19 +61,46 @@ serialDevice instance_name (
 	initial begin
 	reset <= 1; # 22; reset <= 0;	
 	init <= 1; # 22; init <= 0;	
-	rx <= 1;
+
 	//dos procesos
 		//1) envio de datos
 			//se necesita activa el start_Send  y proveer los datos
 			
+			start_send <= 0;
+			in_data <= 8'b0;
 			
+			# 6000000;
+			start_send <= 1;
+			in_data <= 8'b11001010;
+			start_send <= 0;
+			#22
+			start_send <= 1;
+			#1
+			start_send <= 0;
+			#10
+			start_send <= 1;
+			#22
+			start_send <= 0;
+			#1
+			start_send <= 1;
+			#10
+			# 6000000;
+			start_send <= 1;
+			in_data <= 8'b0;
+			# 7000000;
+			start_send <= 0;
+			in_data <= 8'b11001010;	
+			# 22; 
+			start_send <= 1;
+			in_data <= 8'b0;
 					
 		//2) recepcion de datos
 			//se necesita sentir un comportamiento en la señal de entrada
-			# 25_234_134
-			rx <= 0; # 8680;// estado normal
+			# 20_234_134
+			rx <= 1; # 8680;// estado normal
 			
-			rx<=0; # 8680;  // inicio del envio			
+			rx<=0; # 8680;  // inicio del envio
+			
 			rx<=1; # 8680; 
 			rx<=0; # 8680; 
 			rx<=1; # 8680; 
@@ -80,25 +108,26 @@ serialDevice instance_name (
 			rx<=0; # 8680;
 			rx<=1; # 8680;
 			rx<=1; # 8680;
-			
 			rx<=0; # 8680;
-			// el numero enviado es 10_11_01_10
-			rx<=1; # 8680; //terminacion de envio
 			
+			rx<=0; # 8680; //terminacion de envio
 			
-			rx<=1; # 8680;
+			rx <= 1; # 8680;// estado normal
+			
+			rx<=0; # 8680;  // inicio del envio
+			 
+			rx<=1; # 8680; 
 			rx<=0; # 8680; 
 			rx<=1; # 8680; 
 			rx<=1; # 8680; 
 			rx<=0; # 8680;
 			rx<=1; # 8680;
 			rx<=1; # 8680;
-			rx<=0; # 8680;
 			rx<=1; # 8680;
 			
 			
 
-
+	
     
 
 	end
